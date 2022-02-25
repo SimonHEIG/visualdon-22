@@ -1,37 +1,76 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <script src="js/script.js" async></script>
 
-    <title>1-SVG</title>
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <script src="js/script.js" async></script>
 
-    <h1>Dessiner des formes</h1>
-    <h2>Rectangle</h2>
+  <title>1-SVG</title>
+</head>
 
-    <h2>Donut</h2>
+<body>
 
+  <h1>Dessiner des formes</h1>
+  <h2>Rectangle</h2>
 
-    <h2>Ligne</h2>
+  <svg>
+    <rect width="300" height="100" style="fill:rgb(255,0,0)" />
+  </svg>
 
+  <h2>Donut</h2>
+  <svg>
+    <g transform="translate(15 15)">
+      <circle cx="50" cy="50" r="60" stroke="black" stroke-width="3" fill="none" />
+      <circle cx="50" cy="50" r="30" stroke="black" stroke-width="3" fill="none" />
+    </g>
+  </svg>
 
-    <h2>Path</h2>
+  <h2>Ligne</h2>
+  <svg>
+    <line x1="20" y1="50" x2="80" y2="50" style="stroke:rgb(255,0,0); stroke-width:2" transform="rotate(78, 20, 50)" />
+  </svg>
 
+  <h2>Path</h2>
+  <svg>
+    <!-- Faire en 0 . 0 Puis translate  -->
+    <path d="M 50 10 H 10 V 40 H 50 V 70 H 10" style="stroke:rgb(255,0,0); stroke-width:2" fill="none" />
+    <path d="M 60 10 V 70" style="stroke:rgb(255,0,0); stroke-width:2" fill="none" />
+    <path d="M 70 70 V 10 L 85 70 L 100 10 V 70" style="stroke:rgb(255,0,0); stroke-width:2" fill="none" />
+    <path d="M 110 10 H 150 V 70 H 110 V 10" style="stroke:rgb(255,0,0); stroke-width:2" fill="none" />
+    <path d="M 160 70 V 10 L 175 70 V 10" style="stroke:rgb(255,0,0); stroke-width:2" fill="none" />
+  </svg>
 
-    <h1>Animer des formes</h1>
+  <h1>Animer des formes</h1>
 
-    <h2>On click</h2>
+  <h2>On click</h2>
+  <svg>
+    <rect width="300" height="100" style="fill:red" id="onClick" />
+  </svg>
 
-    <h2>On hover</h2>
+  <h2>On hover</h2>
+  <svg>
+    <g transform="translate(15 15)">
+      <circle cx="50" cy="50" r="60" stroke="black" stroke-width="3" fill="none" id="onHover" />
+      <circle cx="50" cy="50" r="30" stroke="black" stroke-width="3" fill="none" />
+    </g>
+  </svg>
 
-    <h2>Prenez la première lettre de votre prénom que vous avez créée ci-dessus. Faite bouger une forme de votre choix le long de la lettre</h2>
+  <h2>Prenez la première lettre de votre prénom que vous avez créée ci-dessus. Faite bouger une forme de votre choix le
+    long de la lettre</h2>
+  <svg>
+    <path d="M 50 10 H 10 V 40 H 50 V 70 H 10" style="stroke:black; stroke-width:2" fill="none" id="s"/>
+    
+    <circle cx="" cy="" r="5" fill="red">
+      <animateMotion dur="6s" repeatCount="indefinite">
+        <mpath xlink:href="#s" />
+      </animateMotion>
+    </circle>
+  </svg>
 
+</body>
 
-  </body>
 </html>
