@@ -24,7 +24,7 @@ Vous avez à disposition 3 jeux de données:
 * ```data/population_total.csv``` : population depuis 1800
 
 ## Graphique statique (délai 1 avril)
-Le premier rendu implique la visualisation statique des données ```data/gapminder.csv``` pour l'année 2021 sous forme de [Scatter/Bubble Chart](https://www.gapminder.org/tools/#$chart-type=bubbles&url=v1). Vous aurez sur l'axe X les données de PIB par habitant et sur l'axe Y l'espérance de vie. La taille des cercles devra être proportionnelle à la population du pays. 
+Le premier rendu implique la visualisation statique des données ```data/gapminder.csv``` pour l'année 2021 sous forme de [Scatter/Bubble Chart](https://www.gapminder.org/tools/#$chart-type=bubbles&url=v1). Vous aurez sur l'axe X les données de PIB par habitant et sur l'axe Y l'espérance de vie. La taille des cercles devra être proportionnelle à la population du pays.
 
 
 ## Cartographie (délai 8 avril)
