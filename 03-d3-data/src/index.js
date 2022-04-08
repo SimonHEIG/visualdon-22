@@ -77,8 +77,7 @@ Promise.all([
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
     x.domain(nbPostUser.map(function (d) { return d.nom; }));
     y.domain([0, d3.max(nbPostUser, function (d) { return d.posts; })]);

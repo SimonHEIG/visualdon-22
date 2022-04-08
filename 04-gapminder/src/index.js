@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import { max } from 'd3'
 
 // Pour importer les données
 // import file from '../data/data.csv'
@@ -134,8 +133,6 @@ allPopulation2021.forEach(pays => {
 console.log('max pop : ' + maxPop);
 
 
-
-
 // Dimension du graph
 let margin = { top: 20, right: 20, bottom: 30, left: 40 },
     width = 960 - margin.left - margin.right,
@@ -175,7 +172,7 @@ svg.append('g')
     .attr("cx", function (d) { return x(d.income) })
     .data(allLife2021)
     .join()
-    .attr("cy", function (d) { return y(d.life)})
+    .attr("cy", function (d) { return y(d.life) })
     .data(allPopulation2021)
     .join()
     .attr("r", function (d) { return ronds(d.pop) })
@@ -193,4 +190,86 @@ svg.append("g")
 svg.append("g")
     .call(d3.axisLeft(y));
 
+
+/* ----------------- CARTOGRAPHIE --------------------- */
+
+// SETUP DU CANEVAS
+let svgCarte = d3.select("#map")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+// FETCH DE LA CARTE THEN PLEIN DE TRUCS
+Promise.all([
+    d3.json('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson')
+]).then((data) => {
+    // COMME ON RECOIT UN TABLEAU, ON PREND L'ELEMENT 0
+    let mapData = data[0]
+
+    // CREE UNE PROJECTION DE MERCATOR
+    let projection = d3.geoMercator()
+        .fitSize([width, height], mapData)
+
+    // CREER UN GENERATEUR DE TRACÉS PAR RAPPORT A LA PROJECTION
+    let path = d3.geoPath()
+        .projection(projection)
+
+    // SHEMA DE COULEUR A UTILISER
+    let colorScale = d3.scaleThreshold()
+        .domain([30, 40, 50, 60, 70, 80, 90, 100])
+        .range(d3.schemeBlues[8])
+
+    // FONTIONS POUR LE PASSAGE DE LA SOURIS
+    let mouseOver = function (d) {
+        d3.selectAll(".Country")
+            .transition()
+            .duration(200)
+            .style("opacity", .5)
+        d3.select(this)
+            .transition()
+            .duration(200)
+            .style("opacity", 1)
+            .style("stroke", "black")
+    }
+    let mouseLeave = function (d) {
+        d3.selectAll(".Country")
+            .transition()
+            .duration(200)
+            .style("opacity", .8)
+        d3.select(this)
+            .transition()
+            .duration(200)
+            .style("stroke", "transparent")
+    }
+
+    // AFFICHAGE DE LA CARTE
+    svgCarte.selectAll("path")
+        // MAPDATE.FEATURE = UN TABLEAU D'OBJET -> UN OBJET = UN PAYS
+        .data(mapData.features)
+        .enter()
+        // ON AJOUTE LE TRACÉ EN FONCTION DU GENERATEUR
+        .append("path")
+        .attr("d", path)
+        // REMPLISSAGE EN FONCTION DE L'ESPERANCE DE VIE
+        .attr("fill", function (d) {
+            let life = 0;
+            allLife2021.forEach(pays => {
+                if (pays.country == d.properties.name) {
+                    life = pays.life
+                }
+            })
+            return colorScale(life);
+        })
+        // AUTRES ATTRIBUTS
+        .style("stroke", "transparent")
+        .attr("class", 'Country')
+        .style("opacity", .8)
+        // FONCTIONS
+        .on("mouseover", mouseOver)
+        .on("mouseleave", mouseLeave)
+
+
+})
 

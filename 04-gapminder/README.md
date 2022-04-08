@@ -31,7 +31,7 @@ Le premier rendu implique la visualisation statique des données ```data/gapmind
 Représentez les valeurs d'espérance de vie sur une carte. 
 Trouver des données géographiques en format *.geojson*, et visualiser l'espérance de vie sous forme de : 
 * [Carte choroplète](https://d3-graph-gallery.com/graph/choropleth_hover_effect.html)
-* [Cartogramme](https://d3-graph-gallery.com/cartogram)
+* [Cartogramme](https://d3-graph-gallery.com/cartogram) -> bonus
 
 ## Animation (délai 22 avril)
 Animer les données selon les années. En bref : faite le premier graphique, mais pour chaque année! Cela doit ressembler à la visualisation proposée par [Gapminder](https://www.gapminder.org/tools/#$chart-type=bubbles&url=v1).
