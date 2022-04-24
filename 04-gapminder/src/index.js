@@ -70,7 +70,7 @@ annees.forEach(annee => {
     const lifeAnnee = life.filter(d => d.annee == annee).map(d => d.data)[0];
     dataCombined.push({ "annee": annee, "data": mergeByCountry(popAnnee, incomeAnnee, lifeAnnee) })
 });
-// console.log(dataCombined)
+console.log(dataCombined)
 
 let allIcome2021 = []
 dataCombined.forEach(annee => {
@@ -81,6 +81,7 @@ dataCombined.forEach(annee => {
     }
 })
 console.log(allIcome2021);
+
 let allLife2021 = []
 dataCombined.forEach(annee => {
     if (annee.annee == '2021') {
@@ -90,6 +91,7 @@ dataCombined.forEach(annee => {
     }
 })
 console.log(allLife2021);
+
 let allPopulation2021 = []
 dataCombined.forEach(annee => {
     if (annee.annee == '2021') {
@@ -139,7 +141,7 @@ let margin = { top: 20, right: 20, bottom: 30, left: 40 },
     height = 500 - margin.top - margin.bottom;
 
 // Echelles
-let x = d3.scaleLinear()
+let x = d3.scaleSqrt()
     .domain([0, maxIcome])
     .range([0, width])
     .nice()
@@ -152,7 +154,7 @@ let y = d3.scalePow()
 
 let ronds = d3.scaleSqrt()
     .domain([minPop, maxPop])
-    .range([5, 20]);
+    .range([5, 40]);
 
 
 // Affichage grille
@@ -273,3 +275,127 @@ Promise.all([
 
 })
 
+
+/* ----------------- ANIMATION --------------------- */
+
+// Affichage de l'années courrante
+d3.select('#animation').append('h1').attr('id', 'anneeCourante')
+
+// Affichage grille
+let svgAnimation = d3.select("#animation")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+// Add x axis
+svgAnimation.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+// Add y axis
+svgAnimation.append("g")
+    .call(d3.axisLeft(y));
+
+
+
+
+let maxIcomeOverall = 0;
+dataCombined.forEach(annee => {
+    annee.data.forEach(pays => {
+        if (pays.income >= maxIcomeOverall) {
+            maxIcomeOverall = pays.income;
+        }
+    })
+});
+let maxLifeOverall = 0;
+dataCombined.forEach(annee => {
+    annee.data.forEach(pays => {
+        if (pays.life >= maxLifeOverall) {
+            maxLifeOverall = pays.life;
+        }
+    })
+});
+
+let minPopOverall = 1000000000000000
+dataCombined.forEach(annee => {
+    annee.data.forEach(pays => {
+        if (pays.pop <= minPopOverall) {
+            minPopOverall = pays.pop;
+        }
+    })
+});
+
+
+let maxPopOverall = 0
+dataCombined.forEach(annee => {
+    annee.data.forEach(pays => {
+        if (pays.pop >= maxPopOverall) {
+            maxPopOverall = pays.pop;
+        }
+    })
+});
+
+
+// Echelles
+let xAnimation = d3.scaleSqrt()
+    .domain([0, maxIcomeOverall])
+    .range([0, width])
+
+let yAnimation = d3.scalePow()
+    .exponent(1.7)
+    .domain([0, maxLifeOverall])
+    .range([height, 0])
+
+let rondsAnimation = d3.scaleSqrt()
+    .domain([minPopOverall, maxPopOverall])
+    .range([5, 40]);
+
+
+// Variable où on stocke l'id de notre intervalle
+let nIntervId;
+
+function animate() {
+    // regarder si l'intervalle a été déjà démarré
+    if (!nIntervId) {
+        nIntervId = setInterval(play, 100);
+    }
+    console.log(nIntervId);
+}
+
+
+let i = -1;
+
+function play() {
+    if (i == 250) {
+        i = 0;
+    } else {
+        i++;
+    }
+
+    // Update de l'année courante
+    d3.select('#anneeCourante').text(dataCombined[i].annee)
+    updateGraphique(dataCombined[i]);
+}
+
+function updateGraphique(dataAnneCourante) {
+    svgAnimation.selectAll('circle')
+        .data(dataAnneCourante.data)
+        .join(enter => enter.append('circle')
+            .style("fill", "red")
+            .attr("opacity", "0.7")
+            .attr("stroke", "black")
+            .attr('cx', function (d) { return xAnimation(d.income); })
+            .attr('cy', function (d) { return yAnimation(d.life); })
+            .attr('r', function (d) { return rondsAnimation(d.pop); }),
+            update => update.transition(d3.transition()
+                .duration(500)
+                .ease(d3.easeLinear))
+                .attr('cx', function (d) { return xAnimation(d.income); })
+                .attr('cy', function (d) { return yAnimation(d.life); })
+                .attr('r', function (d) { return rondsAnimation(d.pop); }),
+            exit => exit.remove())
+}
+
+animate();
