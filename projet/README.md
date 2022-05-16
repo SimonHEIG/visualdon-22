@@ -1,5 +1,5 @@
 
-# Lien du repor
+# Lien du repo
 https://github.com/SimonHEIG/visualdon-projet
 
 ## Projet
